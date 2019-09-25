@@ -6,3 +6,7 @@
 .game-info {
 	margin-left: 20px;
 }
+
+.hovered {
+	background: rgb(184, 178, 178);
+}
