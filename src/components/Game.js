@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import "./../styles/Game.css";
 import Board from "./Board";
 import calculateWinner from "./../utils/calculateWinner";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
+import StatusPanel from "./StatusPanel";
+import currentStatusText from './../utils/currentStatusText';
+import formatMoveDescription from './../utils/formatMoveDescription';
+import ListItem from "./ListItem";
 
 class Game extends Component {
     constructor(props) {
@@ -18,7 +20,6 @@ class Game extends Component {
             stepNumber: 0,
             xIsNext: true,
             hovered: null,
-            isAscending: true
         };
     }
 
@@ -27,7 +28,7 @@ class Game extends Component {
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         const { draw, winner } = calculateWinner(squares);
-        if (winner || draw || squares[i]) {
+        if (squares[i] || winner || draw) {
             return;
         }
         squares[i] = this.state.xIsNext ? "X" : "O";
@@ -40,12 +41,6 @@ class Game extends Component {
             ]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext
-        });
-    }
-
-    changeSorting() {
-        this.setState({
-            isAscending: !this.state.isAscending
         });
     }
 
@@ -73,69 +68,39 @@ class Game extends Component {
         const current = history[this.state.stepNumber];
         const { winningLine, draw, winner } = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
-            const row = Math.floor(step.currentMove / 3) + 1;
-            const col = step.currentMove % 3 + 1;
-            const isHovered = this.state.hovered !== null && step.currentMove === this.state.hovered;
+        const moves = history.map(({ currentMove }, move) => {
+            const isHovered = this.state.hovered !== null && currentMove === this.state.hovered;
 
-            const desc = move ?
-                `Go to move #${move} (${row}, ${col})` :
-                'Go to game start';
             return (
-                <li key={move}>
-                    <button
-                        className={(isHovered ? "hovered" : "")}
-                        onClick={() => this.jumpTo(move)}
-                    >
-                        {desc}
-                    </button>
-                </li>
+                <ListItem
+                    key={move}
+                    isHovered={isHovered}
+                    onClick={() => this.jumpTo(move)}
+                    description={formatMoveDescription(move, currentMove)}
+                />
             );
         });
 
-        let status;
-        if (winner) {
-            status = "Winner: " + current.squares[winningLine[0]];
-        } else if (draw) {
-            status = "The game is a draw!";
-        } else {
-            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
-        }
-
-        const isAscending = this.state.isAscending;
-
         return (
             <div className="game">
-                <div className="game-board">
-                    <Board
-                        winningLine={winningLine}
-                        squares={current.squares}
-                        onClick={i => this.handleClick(i)}
-                        hovered={this.state.hovered}
-                        onMouseOver={i => this.handleMouseOver(i)}
-                        onMouseOut={() => this.handleMouseOut()}
-                    />
-                </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <button
 
-                        onClick={() => this.changeSorting()}
-                    >
-                        {isAscending
-                            ? <span>sorting: <FontAwesomeIcon icon={faArrowDown} /></span>
-                            : <span>sorting:  <FontAwesomeIcon icon={faArrowUp} /></span>
-                        }
-                    </button>
-                    <ol>
-                        {isAscending
-                            ? [moves[0], ...moves.slice(1).sort((a, b) => a.key > b.key)]
-                            : [moves[0], ...moves.slice(1).sort((a, b) => a.key < b.key)]
-                        }</ol>
-                </div>
+                <Board
+                    winningLine={winningLine}
+                    squares={current.squares}
+                    onClick={i => this.handleClick(i)}
+                    hovered={this.state.hovered}
+                    onMouseOver={i => this.handleMouseOver(i)}
+                    onMouseOut={() => this.handleMouseOut()}
+                />
+                <StatusPanel
+                    status={currentStatusText(winner, draw, current.squares[winningLine[0]], this.state.xIsNext)}
+                    moves={moves}
+                />
             </div>
         );
     }
+
+
 }
 
 export default Game;
