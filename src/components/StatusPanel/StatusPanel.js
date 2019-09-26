@@ -1,45 +1,29 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import MoveList from "./MoveList";
 import SortButton from "./SortButton";
 
-class StatusPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isAscending: true
-        }
-    }
+const StatusPanel = ({ status, moves, hovered, onClick }) => {
+    const [isAscending, setAscending] = useState(true);
 
-    changeSorting() {
-        this.setState({
-            isAscending: !this.state.isAscending
-        });
-    }
+    const sortedMoves = [moves[0], ...moves.slice(1).sort((a, b) =>
+        (isAscending ? a.move > b.move : a.move < b.move))
+    ]
 
-    render() {
-        const { status, moves, hovered, onClick } = this.props;
-        const { isAscending } = this.state;
+    return (
 
-        const sortedMoves = [moves[0], ...moves.slice(1).sort((a, b) =>
-            (isAscending ? a.move > b.move : a.move < b.move))
-        ]
-
-        return (
-
-            <div className="game-info">
-                <div>{status}</div>
-                <SortButton
-                    isAscending={isAscending}
-                    changeSorting={() => this.changeSorting()}
-                />
-                <MoveList
-                    hovered={hovered}
-                    onClick={onClick}
-                    moves={sortedMoves}
-                />
-            </div>
-        );
-    }
+        <div className="game-info">
+            <div>{status}</div>
+            <SortButton
+                isAscending={isAscending}
+                changeSorting={() => setAscending(!isAscending)}
+            />
+            <MoveList
+                hovered={hovered}
+                onClick={onClick}
+                moves={sortedMoves}
+            />
+        </div>
+    );
 }
 
 export default StatusPanel;
