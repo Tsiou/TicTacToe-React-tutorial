@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import "./../styles/Game.css";
-import Board from "./Board";
+import Board from "./BoardPanel/Board";
 import calculateWinner from "./../utils/calculateWinner";
-import StatusPanel from "./StatusPanel";
+import StatusPanel from "./StatusPanel/StatusPanel";
 import currentStatusText from './../utils/currentStatusText';
-import formatMoveDescription from './../utils/formatMoveDescription';
-import ListItem from "./ListItem";
 
 class Game extends Component {
     constructor(props) {
@@ -68,19 +66,6 @@ class Game extends Component {
         const current = history[this.state.stepNumber];
         const { winningLine, draw, winner } = calculateWinner(current.squares);
 
-        const moves = history.map(({ currentMove }, move) => {
-            const isHovered = this.state.hovered !== null && currentMove === this.state.hovered;
-
-            return (
-                <ListItem
-                    key={move}
-                    isHovered={isHovered}
-                    onClick={() => this.jumpTo(move)}
-                    description={formatMoveDescription(move, currentMove)}
-                />
-            );
-        });
-
         return (
             <div className="game">
 
@@ -94,7 +79,9 @@ class Game extends Component {
                 />
                 <StatusPanel
                     status={currentStatusText(winner, draw, current.squares[winningLine[0]], this.state.xIsNext)}
-                    moves={moves}
+                    moves={history.map(({currentMove}, move) => ({currentMove, move}))}
+                    hovered={this.state.hovered}
+                    onClick={step => this.jumpTo(step)}
                 />
             </div>
         );

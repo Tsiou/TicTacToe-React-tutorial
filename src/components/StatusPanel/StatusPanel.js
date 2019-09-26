@@ -17,11 +17,15 @@ class StatusPanel extends Component {
     }
 
     render() {
-        const {status, moves} = this.props;
-        const isAscending = this.state.isAscending;
+        const { status, moves, hovered, onClick } = this.props;
+        const { isAscending } = this.state;
+
+        const sortedMoves = [moves[0], ...moves.slice(1).sort((a, b) =>
+            (isAscending ? a.move > b.move : a.move < b.move))
+        ]
 
         return (
-            
+
             <div className="game-info">
                 <div>{status}</div>
                 <SortButton
@@ -29,8 +33,9 @@ class StatusPanel extends Component {
                     changeSorting={() => this.changeSorting()}
                 />
                 <MoveList
-                    isAscending={isAscending}
-                    moves={moves}
+                    hovered={hovered}
+                    onClick={onClick}
+                    moves={sortedMoves}
                 />
             </div>
         );
