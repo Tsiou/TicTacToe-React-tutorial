@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MoveList from "./MoveList";
 import SortButton from "./SortButton";
 
-const StatusPanel = ({ status, moves, hovered, onClick }) => {
+const StatusPanel = ({ status, moves, ...childProps }) => {
     const [isAscending, setAscending] = useState(true);
 
     const sortedMoves = [moves[0], ...moves.slice(1).sort((a, b) =>
@@ -17,11 +17,7 @@ const StatusPanel = ({ status, moves, hovered, onClick }) => {
                 isAscending={isAscending}
                 changeSorting={() => setAscending(!isAscending)}
             />
-            <MoveList
-                hovered={hovered}
-                onClick={onClick}
-                moves={sortedMoves}
-            />
+            <MoveList {...{ moves:sortedMoves, ...childProps}} />
         </div>
     );
 }
