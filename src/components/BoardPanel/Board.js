@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./../../styles/Board.css";
 import Row from "./Row";
 
-
 class Board extends Component {
     render() {
         const rows = [];
@@ -21,11 +20,7 @@ class Board extends Component {
                     <Row
                         key={index}
                         positions={row}
-                        winningLine={this.props.winningLine}
-                        squares={this.props.squares}
-                        onClick={this.props.onClick}
-                        onMouseOver={this.props.onMouseOver}
-                        onMouseOut={this.props.onMouseOut}
+                        {...this.props}
                     ></Row>
                 )}
             </div>
