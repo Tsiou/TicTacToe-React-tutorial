@@ -65,29 +65,27 @@ class Game extends Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const { winningLine, draw, winner } = calculateWinner(current.squares);
+        const currentStatus = currentStatusText(winner, draw, current.squares[winningLine[0]], this.state.xIsNext)
+        const moves = history.map(({currentMove}, move) => ({currentMove, move}));
 
         return (
             <div className="game">
-
                 <Board
                     winningLine={winningLine}
                     squares={current.squares}
                     onClick={i => this.handleClick(i)}
-                    hovered={this.state.hovered}
                     onMouseOver={i => this.handleMouseOver(i)}
                     onMouseOut={() => this.handleMouseOut()}
                 />
                 <StatusPanel
-                    status={currentStatusText(winner, draw, current.squares[winningLine[0]], this.state.xIsNext)}
-                    moves={history.map(({currentMove}, move) => ({currentMove, move}))}
+                    status={currentStatus}
+                    moves={moves}
                     hovered={this.state.hovered}
                     onClick={step => this.jumpTo(step)}
                 />
             </div>
         );
     }
-
-
 }
 
 export default Game;
