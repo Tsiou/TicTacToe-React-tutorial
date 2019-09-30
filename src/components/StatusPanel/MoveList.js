@@ -1,6 +1,7 @@
 import React from "react";
 import ListItem from "./ListItem";
 import formatMoveDescription from './../../utils/formatMoveDescription';
+import PropTypes from "prop-types";
 
 const MoveList = ({ hovered, onClick, moves }) => (
     <ol>
@@ -13,7 +14,13 @@ const MoveList = ({ hovered, onClick, moves }) => (
             />
         )}
     </ol>
-)
+);
+
+MoveList.propTypes = {
+    hovered: PropTypes.number,
+    onClick: PropTypes.func,
+    moves: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number, PropTypes.number))
+};
 
 export default MoveList;
 

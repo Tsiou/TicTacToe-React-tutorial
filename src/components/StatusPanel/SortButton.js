@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from "prop-types";
 
 const SortButton = ({ isAscending, changeSorting }) => (
     <button
@@ -11,6 +12,11 @@ const SortButton = ({ isAscending, changeSorting }) => (
             : <span>sorting:  <FontAwesomeIcon icon={faArrowUp} /></span>
         }
     </button>
-)
+);
+
+SortButton.propTypes = {
+    isAscending: PropTypes.bool,
+    changeSorting: PropTypes.func
+};
 
 export default SortButton;
