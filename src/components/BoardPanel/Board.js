@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./../../styles/Board.css";
 import Row from "./Row";
+import PropTypes from 'prop-types';
 
 class Board extends Component {
     render() {
@@ -26,6 +27,14 @@ class Board extends Component {
             </div>
         )
     }
+}
+
+Board.propTypes = {
+    squares: PropTypes.arrayOf(PropTypes.number),
+    winningLine: PropTypes.arrayOf(PropTypes.number),
+    onClick: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseOut: PropTypes.func
 }
 
 export default Board;

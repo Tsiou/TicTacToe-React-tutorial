@@ -1,7 +1,8 @@
 import React from "react";
 import Square from "./Square";
+import PropTypes from 'prop-types';
 
-const Row = ({positions, squares, winningLine, onClick, onMouseOver, onMouseOut }) => (
+const Row = ({positions, squares, winningLine, ...childProps }) => (
     <div className="board-row">
         {positions.map(position => (
             <Square
@@ -9,12 +10,19 @@ const Row = ({positions, squares, winningLine, onClick, onMouseOver, onMouseOut 
                 position={position}
                 value={squares[position]}
                 isWinningSquare={winningLine.includes(position)}
-                onClick={onClick}
-                onMouseOver={onMouseOver}
-                onMouseOut={onMouseOut}
+                {...childProps}
             />
         ))}
     </div>
 );
+
+Row.propTypes = {
+    positions: PropTypes.arrayOf(PropTypes.number),
+    squares: PropTypes.arrayOf(PropTypes.number),
+    winningLine: PropTypes.arrayOf(PropTypes.number),
+    onClick: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseOut: PropTypes.func
+}
 
 export default Row;
