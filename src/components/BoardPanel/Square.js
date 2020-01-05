@@ -6,7 +6,7 @@ const Square = ({ value, position, isWinningSquare, onClick, onMouseOver, onMous
     <button className={"square" + (isWinningSquare ? " winning" : "")}
             onClick={() => onClick(position)} 
             onMouseOver={() => onMouseOver(position)} 
-            onMouseOut={() => onMouseOut()}
+            onMouseOut={onMouseOut}
             >
         {value}
     </button>

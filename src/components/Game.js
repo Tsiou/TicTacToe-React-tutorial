@@ -1,91 +1,81 @@
-import React, { Component } from "react";
+import React, {useState} from "react";
 import "./../styles/Game.css";
 import Board from "./BoardPanel/Board";
 import calculateWinner from "./../utils/calculateWinner";
 import StatusPanel from "./StatusPanel/StatusPanel";
 import currentStatusText from './../utils/currentStatusText';
 
-class Game extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            history: [
-                {
-                    squares: Array(9).fill(null),
-                    currentMove: null
-                }
-            ],
-            stepNumber: 0,
-            xIsNext: true,
-            hovered: null,
-        };
-    }
 
-    handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[history.length - 1];
+const Game = () => {
+    const [stepNumber, setStepNumber] = useState(0);
+    const [xIsNext, setNext] = useState(true);
+    const [history, setHistory] = useState([{
+        squares: Array(9).fill(null),
+        currentMove: null
+    }]);
+    const [hovered, setHovered] = useState(null);
+
+    const handleClick = markedTile => {
+        const currHistory = history.slice(0, stepNumber + 1);        
+        const current = currHistory[currHistory.length -1];
         const squares = current.squares.slice();
-        const { draw, winner } = calculateWinner(squares);
-        if (squares[i] || winner || draw) {
+        if(squares[markedTile]){
             return;
         }
-        squares[i] = this.state.xIsNext ? "X" : "O";
-        this.setState({
-            history: history.concat([
+
+        const {draw, winner} = calculateWinner(squares);
+        if(winner || draw ) {
+            return;
+        }
+
+        squares[markedTile] = xIsNext ? "X" : "O";
+        setHistory([
+            ...currHistory,
                 {
                     squares: squares,
-                    currentMove: i
+                    currentMove: markedTile
                 }
-            ]),
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
-        });
+            ]);
+        setStepNumber(currHistory.length);
+        setNext(!xIsNext);
     }
 
-    jumpTo(step) {
-        this.setState({
-            stepNumber: step,
-            xIsNext: (step % 2) === 0
-        });
+    const jumpTo = step => {
+        setStepNumber(step);
+        setNext((step % 2) === 0);
     }
 
-    handleMouseOver(i) {
-        this.setState({
-            hovered: i
-        })
+    const handleMouseOver = tileNumber => {
+        setHovered(tileNumber);
     }
 
-    handleMouseOut() {
-        this.setState({
-            hovered: null
-        })
+    const handleMouseOut = () => {
+        setHovered(null);
     }
 
-    render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
-        const { winningLine, draw, winner } = calculateWinner(current.squares);
-        const currentStatus = currentStatusText(winner, draw, current.squares[winningLine[0]], this.state.xIsNext)
-        const moves = history.map(({currentMove}, move) => ({currentMove, move}));
+    const current = history[stepNumber];
+    const { winningLine, draw, winner } = calculateWinner(current.squares);
+    const currentStatus = currentStatusText(winner, draw, current.squares[winningLine[0]], xIsNext)
+    const moves = history.map(({currentMove}, move) => ({currentMove, move}));
 
-        return (
-            <div className="game">
-                <Board
-                    winningLine={winningLine}
-                    squares={current.squares}
-                    onClick={i => this.handleClick(i)}
-                    onMouseOver={i => this.handleMouseOver(i)}
-                    onMouseOut={() => this.handleMouseOut()}
-                />
-                <StatusPanel
-                    status={currentStatus}
-                    moves={moves}
-                    hovered={this.state.hovered}
-                    onClick={step => this.jumpTo(step)}
-                />
-            </div>
-        );
-    }
+
+    return(
+        <div className="game">
+            <Board
+                winningLine={winningLine}
+                squares={current.squares}
+                onClick={i => handleClick(i)}
+                onMouseOver={i => handleMouseOver(i)}
+                onMouseOut={() => handleMouseOut()}
+            />
+            <StatusPanel
+                status={currentStatus}
+                moves={moves}
+                hovered={hovered}
+                onClick={step => jumpTo(step)}
+            />
+        </div>
+    );
 }
 
 export default Game;
