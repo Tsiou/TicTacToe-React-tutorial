@@ -7,7 +7,7 @@ const MoveList = ({ hovered, onClick, moves }) => {
     <ol>
       {moves.map(moveItem => {
         const { currentMove, move } = moveItem;
-        const isHovered = currentMove === hovered;
+        const isHovered = hovered !== null && currentMove === hovered;
         return (
           <ListItem
             key={move}
