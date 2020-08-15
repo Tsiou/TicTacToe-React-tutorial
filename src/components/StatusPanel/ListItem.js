@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const ListItem = ({ move: { currentMove, move }, isHovered, onClick }) => {
   return (
     <li key={move}>
-      <button className={isHovered ? "hovered" : ""} onClick={() => onClick()}>
+      <button className={isHovered ? "hovered" : ""} onClick={onClick}>
         {formatMoveDescription(move, currentMove)}
       </button>
     </li>
@@ -16,7 +16,6 @@ ListItem.propTypes = {
   move: PropTypes.objectOf(PropTypes.number, PropTypes.number),
   isHovered: PropTypes.bool,
   onClick: PropTypes.func,
-  description: PropTypes.string
 };
 
 export default ListItem;
