@@ -2,15 +2,16 @@ import React from "react";
 import Square from "./Square";
 import PropTypes from "prop-types";
 
-const Row = ({ positions, squares, winningLine, ...childProps }) => (
+const Row = ({ positions, squares, winningLine, onClick, onMouseOut, onMouseOver }) => (
   <div className="board-row">
     {positions.map(position => (
       <Square
         key={position}
-        position={position}
         value={squares[position % 3]}
         isWinningSquare={winningLine.includes(position)}
-        {...childProps}
+        onClick={() => onClick(position)}
+        onMouseOut={onMouseOut}
+        onMouseOver={() => onMouseOver(position)}
       />
     ))}
   </div>
