@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import { HistoryItem } from "../types/Game";
+
+import { useState } from "react";
 import "./../styles/Game.css";
 import Board from "./BoardPanel/Board";
-import calculateWinner from "./../utils/calculateWinner";
+import calculateWinner from "../utils/calculateWinner";
 import StatusPanel from "./StatusPanel/StatusPanel";
-import currentStatusText from "./../utils/currentStatusText";
+import currentStatusText from "../utils/currentStatusText";
 
 const Game = () => {
 	const [stepNumber, setStepNumber] = useState(0);
 	const [xIsNext, setNext] = useState(true);
-	const [history, setHistory] = useState([
+	const [history, setHistory] = useState<Array<HistoryItem>>([
 		{
 			squares: Array(9).fill(null),
 			currentMove: null,
 		},
 	]);
-	const [hovered, setHovered] = useState(null);
+	const [hovered, setHovered] = useState<number | null>(null);
 
-	const handleClick = (markedTile) => {
-		const currHistory = history.slice(0, stepNumber + 1);
+	const handleClick = (markedTile: number) => {
+		debugger;
+		const currHistory : Array<HistoryItem> = history.slice(0, stepNumber + 1);
 		const current = currHistory[currHistory.length - 1];
 		const squares = current.squares.slice();
 		if (squares[markedTile]) {
@@ -41,12 +44,12 @@ const Game = () => {
 		setNext(!xIsNext);
 	};
 
-	const jumpTo = (step) => {
+	const jumpTo = (step: number) => {
 		setStepNumber(step);
 		setNext(step % 2 === 0);
 	};
 
-	const handleMouseOver = (tileNumber) => {
+	const handleMouseOver = (tileNumber: number | null) => {
 		setHovered(tileNumber);
 	};
 

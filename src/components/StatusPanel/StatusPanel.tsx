@@ -1,16 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import MoveList from "./MoveList";
 import SortButton from "./SortButton";
-import PropTypes from "prop-types";
 
-const StatusPanel = ({ status, moves, ...childProps }) => {
+interface StatusPanelProps {
+	status: string;
+	moves: Array<{ currentMove: number | null; move: number }>;
+	onClick: (move: number) => void;
+	hovered: number | null;
+}
+
+const StatusPanel: React.FC<StatusPanelProps> = ({
+	status,
+	moves,
+	...childProps
+}) => {
 	const [isAscending, setAscending] = useState(true);
 
 	const sortedMoves = [
 		moves[0],
 		...moves
 			.slice(1)
-			.sort((a, b) => (isAscending ? a.move > b.move : a.move < b.move)),
+			.sort((a, b) => (isAscending ? a.move - b.move : b.move - a.move)),
 	];
 
 	return (
@@ -23,15 +33,6 @@ const StatusPanel = ({ status, moves, ...childProps }) => {
 			<MoveList {...{ moves: sortedMoves, ...childProps }} />
 		</div>
 	);
-};
-
-StatusPanel.propTypes = {
-	status: PropTypes.string,
-	moves: PropTypes.arrayOf(
-		PropTypes.objectOf(PropTypes.number, PropTypes.number)
-	),
-	onClick: PropTypes.func,
-	hovered: PropTypes.number,
 };
 
 export default StatusPanel;

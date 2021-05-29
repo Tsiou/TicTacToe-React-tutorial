@@ -1,4 +1,4 @@
-const currentStatusText = (winner, draw, winnerMark, xIsNext ) => {
+const currentStatusText = (winner: boolean, draw: boolean, winnerMark: string | null, xIsNext: boolean ) => {
     if (winner) {
         return "Winner: " + winnerMark;
     }
