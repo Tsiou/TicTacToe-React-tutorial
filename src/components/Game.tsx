@@ -19,7 +19,6 @@ const Game = () => {
 	const [hovered, setHovered] = useState<number | null>(null);
 
 	const handleClick = (markedTile: number) => {
-		debugger;
 		const currHistory : Array<HistoryItem> = history.slice(0, stepNumber + 1);
 		const current = currHistory[currHistory.length - 1];
 		const squares = current.squares.slice();
