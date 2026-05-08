@@ -15,7 +15,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"types": ["vite/client", "vite-plugin-react"]
+		"types": ["vite/client", "@vitejs/plugin-react"]
 	},
 	"include": ["src"]
 }
