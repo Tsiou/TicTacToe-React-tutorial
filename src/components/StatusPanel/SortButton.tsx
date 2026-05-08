@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
 
 interface SortButtonProps {
 	isAscending: boolean;
@@ -23,10 +22,5 @@ const SortButton: React.FC<SortButtonProps> = ({
 		)}
 	</button>
 );
-
-SortButton.propTypes = {
-	isAscending: PropTypes.bool.isRequired,
-	changeSorting: PropTypes.func.isRequired,
-};
 
 export default SortButton;
